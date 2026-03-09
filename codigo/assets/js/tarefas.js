@@ -1,46 +1,28 @@
 import database from '../../../database.json' with {type: 'json'}
-let data = localStorage.getItem("data")
-if(data == null || data == undefined) {
+
+if (!localStorage.getItem("data")) {
     localStorage.setItem("data", JSON.stringify(database))
-} else {
-    JSON.parse(data)
 }
-if(data){
-//A partir daqui começamos: 
 
+const data = JSON.parse(localStorage.getItem("data"))
 
-let data = localStorage.getItem("data")
-data = JSON.parse(data)
-
-
-//Pegar tarefas soltas do usuario e tarefas vinculadas a um projeto
 const tarefas = []
-data.users[0].tarefas.forEach(element => {
-    tarefas.push(element)
-});
-data.users[0].projetos.map((projeto) => {
-    projeto.tarefas.map((tarefa) => {
-        tarefas.push(tarefa)
-    })
+data.users[0].tarefas.forEach(t => tarefas.push(t))
+data.users[0].projetos.forEach(projeto => {
+    projeto.tarefas.forEach(t => tarefas.push(t))
 })
 
-
 const container = document.getElementById("my-tasks")
-tarefas.map((tarefa) => {
-    
+tarefas.forEach(tarefa => {
     const task = document.createElement("div")
     task.className = 'task'
     task.innerHTML = `
-        <p>${tarefa.titulo}, ${tarefa.data} às ${tarefa.hora}</p>
-        <a href="editar-tarefas.html?${tarefa.id}"><button id="edit-btn">📝</button></a>
-        <a href="delete.html?${tarefa.id}"> <button id="delete-btn">❌</button></a>
-
-    
+        <p>${tarefa.titulo} — ${tarefa.data} às ${tarefa.hora}</p>
+        <a href="editar-tarefas.html?${tarefa.id}"><button>&#x1F4DD; Editar</button></a>
+        <a href="delete.html?${tarefa.id}"><button style="background:none;border:none;font-size:1.2rem;cursor:pointer">❌</button></a>
     `
     container.appendChild(task)
-
 })
-}
 
 
 

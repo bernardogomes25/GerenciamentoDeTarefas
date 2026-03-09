@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Editar Tarefas</title>
     <link rel="stylesheet" href="../assets/css/editar-tarefas.css" />
-    <script src="../assets/js/editar.js" type="module"></script>
+    <script src="../assets/js/editar.js" type="module" defer></script>
   </head>
   <body>
     <!--Inicio da Navbar principal-->
     <nav>
       <img id="logo" src="../assets/images/logo.png" alt="" srcset="" />
       <div class="nav-container">
-        <h1>Calendario</h1>
-        <h1>Projetos</h1>
-        <h1>Ranking</h1>
-        <h1>Tarefas</h1>
+        <a href="main.html"><h1>Calendário</h1></a>
+        <a href="kanban.html"><h1>Projetos</h1></a>
+        <a href="buscar.html"><h1>Buscar</h1></a>
+        <a href="tarefas.html"><h1>Tarefas</h1></a>
       </div>
       <img id="perfil" src="../assets/images/perfil.png" alt="" srcset="" />
     </nav>
@@ -31,9 +31,9 @@
           <h2>Título</h2>
           <input type="text" placeholder="Adicione um Título" id="titulo" />
           <h2>Data</h2>
-          <input type="text" placeholder="DD-MM-YYYY" id="data"/>
+          <input type="date" id="data"/>
           <h2>Hora</h2>
-          <input type="text" placeholder="XX:XX" id="hora" />
+          <input type="time" id="hora" />
           <div class="botao">
             <button type="submit" class="button-1" role="button">Confirmar</button>
             <button type="reset" class="button-1" style="background-color: crimson;" role="button">Cancelar</button>

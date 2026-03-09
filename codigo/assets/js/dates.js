@@ -1,5 +1,5 @@
 let data = localStorage.getItem("data")
-data = JSON.parse(data)
+data = data ? JSON.parse(data) : null
 const meses = [
     "Janeiro",
     "Fevereiro",
@@ -154,6 +154,7 @@ function changeActive() {
 
 //Procura se há tarefas na data
 function showTask(date) {
+    if (!data) return
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
     const formattedDate = date.toLocaleDateString('pt-BR', options).replace(/\//g, '-');
    
@@ -187,7 +188,7 @@ function showTask(date) {
             const wrapper = document.getElementById("task-wrapper")
             const task = document.createElement("div")
 
-            const tarefaJaExistente = document.getElementById(`tarefa-${tarefa.nome}`)
+            const tarefaJaExistente = document.getElementById(`tarefa-${tarefa.titulo}`)
             if (tarefaJaExistente) tarefaJaExistente.remove()
 
             task.id = `tarefa-${tarefa.titulo.replace(" ","-")}`
@@ -235,10 +236,8 @@ document.getElementById("next").addEventListener("click", nextMonth)
 
 
 
-document.addEventListener('DOMContentLoaded', ()=> {
-    document.onload = generateCalendar(date);
-    
-    
+document.addEventListener('DOMContentLoaded', () => {
+    generateCalendar(date)
 })
 
 

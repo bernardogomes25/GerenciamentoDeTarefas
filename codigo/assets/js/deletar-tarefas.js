@@ -1,30 +1,28 @@
 const url = window.location.href
-let index = url.indexOf('?'); // Find the index of the comma
-let result = url.slice(index + 1); // Extract from the character after the comma to the end
+const id = parseInt(url.slice(url.indexOf('?') + 1))
 
-const id = parseInt(result)
-console.log(id)
-//Achar objeto tarefa
-let data = localStorage.getItem("data")
-data = JSON.parse(data)
-let tarefa;
-tarefa = data.users[0].tarefas.find((task) => task.id == id)
-if(!tarefa) {
-    data.users[0].projetos.map((projeto)=>{
-        tarefa = projeto.tarefas.find((task) => task.id == id)
-        let index = projeto.tarefas.findIndex(task => task.id = id)
-        projeto.tarefas.splice(index, 1);
-        
-    })
+let data = JSON.parse(localStorage.getItem("data"))
 
+const singleIndex = data.users[0].tarefas.findIndex(task => task.id === id)
+if (singleIndex !== -1) {
+    data.users[0].tarefas.splice(singleIndex, 1)
 } else {
-    console.log("Else rodando")
-    let indexOfSingleTask = data.users[0].tarefas.findIndex(task => task.id = id)
-    data.users[0].tarefas.splice(indexOfSingleTask, 1)
+    data.users[0].projetos.forEach(projeto => {
+        const taskIndex = projeto.tarefas.findIndex(task => task.id === id)
+        if (taskIndex !== -1) {
+            projeto.tarefas.splice(taskIndex, 1)
+        }
+    })
 }
 
-
 localStorage.setItem("data", JSON.stringify(data))
-setTimeout(()=>{
-    window.location.replace("/codigo/pages/tarefas.html")
-}, "2000")
+
+const msg = document.getElementById("status-msg")
+if (msg) {
+    msg.style.color = "green"
+    msg.textContent = "Tarefa deletada com sucesso!"
+}
+
+setTimeout(() => {
+    window.location.replace("tarefas.html")
+}, 1500)

@@ -1,56 +1,65 @@
 const url = window.location.href
-let index = url.indexOf('?'); // Find the index of the comma
-let result = url.slice(index + 1); // Extract from the character after the comma to the end
+const id = parseInt(url.slice(url.indexOf('?') + 1))
 
-const id = parseInt(result)
-//Achar objeto tarefa
-let data = localStorage.getItem("data")
-data = JSON.parse(data)
+let data = JSON.parse(localStorage.getItem("data"))
 
-
-
-//Atribuit valor dos input aos atuais
-document.getElementById("form").addEventListener("submit", (ev)=> {
-    ev.preventDefault()
-    let titulo = document.getElementById("titulo").value
-    let date = document.getElementById("data").value
-    let hora = document.getElementById("hora").value
-    const instance = {
-        "titulo": titulo,
-        "data": date, 
-        "hora": hora,
+// Encontra a tarefa pelo id (em tarefas avulsas ou dentro de projetos)
+function findTask(id) {
+    let found = data.users[0].tarefas.find(t => t.id === id)
+    if (found) return found
+    for (const projeto of data.users[0].projetos) {
+        found = projeto.tarefas.find(t => t.id === id)
+        if (found) return found
     }
-    let tarefa;
-    tarefa = data.users[0].tarefas.find((task) => task.id === id)
-    if(!tarefa) {
-        data.users[0].projetos.map((projeto)=>{
-            tarefa = projeto.tarefas.find((task) => task.id === id)
-            let index = projeto.tarefas.findIndex(task => task.id = tarefa.id)
-            projeto.tarefas[index] = instance
-            
-        })
+    return null
+}
 
+// Pré-preenche o formulário com os dados atuais da tarefa
+const tarefaAtual = findTask(id)
+if (tarefaAtual) {
+    document.getElementById("titulo").value = tarefaAtual.titulo
+    // Converte DD-MM-YYYY → YYYY-MM-DD para o input type="date"
+    if (tarefaAtual.data) {
+        const [d, m, y] = tarefaAtual.data.split('-')
+        document.getElementById("data").value = `${y}-${m}-${d}`
+    }
+    document.getElementById("hora").value = tarefaAtual.hora
+}
+
+document.getElementById("form").addEventListener("submit", (ev) => {
+    ev.preventDefault()
+    const titulo = document.getElementById("titulo").value.trim()
+    const rawDate = document.getElementById("data").value
+    const hora = document.getElementById("hora").value
+
+    if (!titulo || !rawDate || !hora) {
+        alert("Preencha todos os campos.")
+        return
+    }
+
+    // Converte YYYY-MM-DD → DD-MM-YYYY para armazenamento
+    const [y, m, d] = rawDate.split('-')
+    const date = `${d}-${m}-${y}`
+
+    const instance = { id, titulo, "data": date, hora }
+
+    const singleIndex = data.users[0].tarefas.findIndex(t => t.id === id)
+    if (singleIndex !== -1) {
+        data.users[0].tarefas[singleIndex] = instance
     } else {
-        data.users[0].tarefas.map((tarefa)=> {
-            let indexOfSingleTask = data.users[0].tarefas.findIndex(task => tarefa.id = id)
-            data.users[0].tarefas[indexOfSingleTask]  = instance
+        data.users[0].projetos.forEach(projeto => {
+            const taskIndex = projeto.tarefas.findIndex(t => t.id === id)
+            if (taskIndex !== -1) {
+                projeto.tarefas[taskIndex] = instance
+            }
         })
-
     }
 
     localStorage.setItem("data", JSON.stringify(data))
     alert("Tarefa atualizada!")
-    setTimeout(()=>{
-        window.location.replace("/codigo/pages/tarefas.html")
-    }, "500")
-
-   
-
-
-
-       
-    
-
+    setTimeout(() => {
+        window.location.replace("tarefas.html")
+    }, 500)
 })
 
 

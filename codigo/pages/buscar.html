@@ -1,16 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <link rel="stylesheet" type="text/css" href="../assets/css/buscar.css">
-    <script type="module" src="../assets/js/buscar.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Busca de Tarefas</title>
-    
+    <link rel="stylesheet" type="text/css" href="../assets/css/buscar.css">
 </head>
 <body>
-    <h1>Busca de Tarefas</h1>
-    <input type="text" id="busca" placeholder="Nome">
-    <button id="buscar">Buscar</button>
-    <ul id="lista"></ul>
-
+    <nav>
+        <img id="logo" src="../assets/images/logo.png" alt="logo">
+        <div class="nav-container">
+            <a href="main.html"><h1>Calendário</h1></a>
+            <a href="kanban.html"><h1>Projetos</h1></a>
+            <a href="buscar.html"><h1>Buscar</h1></a>
+            <a href="tarefas.html"><h1>Tarefas</h1></a>
+        </div>
+        <img id="perfil" src="../assets/images/perfil.png" alt="perfil">
+    </nav>
+    <div class="buscar-container">
+        <h1>Busca de Tarefas</h1>
+        <div class="buscar-form">
+            <input type="text" id="busca" placeholder="Digite o nome da tarefa...">
+            <button id="buscar">Buscar</button>
+        </div>
+        <ul id="lista"></ul>
+    </div>
+    <script src="../assets/js/buscar.js"></script>
 </body>
 </html>
